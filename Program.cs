@@ -22,10 +22,10 @@ namespace downloader
             var path = Path.GetInvalidFileNameChars().Aggregate(p, (path, c) => path.Replace(c, '_'));
 
             using var client = new HttpClient();
-            using var stream = await client.GetStreamAsync(downloadUri);
-            using var filestream = File.Create(path);
+            await using var stream = await client.GetStreamAsync(downloadUri);
+            await using var fileStream = File.Create(path);
 
-            await stream.CopyToAsync(filestream);
+            await stream.CopyToAsync(fileStream);
             Console.WriteLine($"File downloaded to '{path}' in {sw.Elapsed.TotalMilliseconds:#,#} ms");
         }
     }
